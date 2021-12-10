@@ -1,13 +1,13 @@
 # metcoin
 Metcoin cryptocurrency
 
-** Install all packages **
+**Install all packages**
 
 ```
 pip install -r requirements.txt
 ```
 
-** Run the tests **
+**Run the tests**
 
 ```
 python -m pytest backend/tests
