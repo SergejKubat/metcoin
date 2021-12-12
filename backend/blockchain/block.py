@@ -36,6 +36,9 @@ class Block:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+    def to_json(self):
+        return self.__dict__
+
     @staticmethod
     def mine_block(last_block, data):
         timestamp = time.time_ns()

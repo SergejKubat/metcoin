@@ -12,3 +12,8 @@ pip install -r requirements.txt
 ```
 python -m pytest backend/tests
 ```
+
+**Run the application and API**
+```
+python -m backend.app
+```
