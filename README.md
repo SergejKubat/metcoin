@@ -17,3 +17,8 @@ python -m pytest backend/tests
 ```
 python -m backend.app
 ```
+
+**Run new peer on network**
+```
+python -m backend.app peer
+```
