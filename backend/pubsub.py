@@ -1,15 +1,19 @@
+import os
 import time
 
 from pubnub.pubnub import PubNub
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.callbacks import SubscribeCallback
 
+from dotenv import load_dotenv
+
 from backend.blockchain.block import Block
 
+load_dotenv('.env')
+
 pnconfig = PNConfiguration()
-pnconfig.subscribe_key = "sub-c-ae3ae5fc-5cf3-11ec-b575-1ef0bc164062"
-pnconfig.publish_key = "pub-c-8f4eb5c2-ff28-48ce-8562-c6012fdbfef0"
-pnconfig.uuid = '44de6736-41b0-4c97-b368-3b27ad1c6dc5'
+pnconfig.subscribe_key = os.environ.get("SUBSCRIBE_KEY")
+pnconfig.publish_key = os.environ.get("PUBLISH_KEY")
 
 CHANNELS = {
     'TEST': 'TEST',
@@ -52,10 +56,10 @@ class PubSub():
 
 def main():
     pubsub = PubSub()
-
     time.sleep(1)
 
     pubsub.publish(CHANNELS['TEST'], {'foo': 'bar'})
+    
 
 
 if __name__ == '__main__':
