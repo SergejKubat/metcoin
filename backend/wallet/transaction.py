@@ -5,14 +5,22 @@ from backend.wallet.wallet import Wallet
 
 
 class Transaction:
-    def __init__(self, sender_wallet, recipient, amount):
-        self.id = str(uuid.uuid4())[0:8]
-        self.output = self.create_output(
+    def __init__(
+        self,
+        sender_wallet=None,
+        recipient=None,
+        amount=None,
+        id=None,
+        input=None,
+        output=None
+    ):
+        self.id = id or str(uuid.uuid4())[0:8]
+        self.output = output or self.create_output(
             sender_wallet,
             recipient,
             amount
         )
-        self.input = self.create_input(sender_wallet, self.output)
+        self.input = input or self.create_input(sender_wallet, self.output)
 
     def create_output(self, sender_wallet, recipient, amount):
         if amount > sender_wallet.balance:
@@ -42,13 +50,17 @@ class Transaction:
         else:
             self.output[recipient] = amount
 
-        self.output[sender_wallet.address] = self.output(
-            sender_wallet.address) - amount
+        self.output[sender_wallet.address] = self.output[
+            sender_wallet.address] - amount
 
         self.input = self.create_input(sender_wallet, self.output)
 
     def to_json(self):
         return self.__dict__
+
+    @staticmethod
+    def from_json(transaction_json):
+        return Transaction(**transaction_json)
 
     @staticmethod
     def is_valid_transaction(transaction):
