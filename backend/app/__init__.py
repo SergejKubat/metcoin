@@ -3,6 +3,7 @@ import requests
 import random
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from backend.blockchain.blockchain import Blockchain
 from backend.wallet.wallet import Wallet
@@ -11,6 +12,7 @@ from backend.wallet.transaction_pool import TransactionPool
 from backend.pubsub import PubSub
 
 app = Flask(__name__)
+CORS(app, resources={r'/*': {'origins': 'http://localhost:3000'}})
 
 blockchain = Blockchain()
 wallet = Wallet(blockchain)
@@ -80,7 +82,7 @@ if (len(sys.argv) > 1 and sys.argv[1] == 'peer'):
 
     try:
         blockchain.replace_chain(result_blockchain.chain)
-        print('\n -- Successfully synchronozed the local chain')
+        print('\n -- Successfully synchronized the local chain')
     except Exception as e:
         print(f'\n -- Error synchronizing: {e}')
 
