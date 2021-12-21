@@ -2,5 +2,15 @@ body {
     font-family: 'Barlow', sans-serif;
     font-weight: 400;
     line-height: 1.7;
-    color: #303d48;
+    color: $color-black;
+}
+
+h1 {
+    font-size: 3.5rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #677185;
 }

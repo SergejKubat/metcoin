@@ -1,0 +1,42 @@
+.navbar {
+    position: fixed;
+    width: 25rem;
+    height: 100%;
+    background-color: #121d33;
+
+    &-list {
+        &-item {
+            display: flex;
+            align-items: center;
+            padding: 1.6rem;
+            font-size: 1.6rem;
+            color: $color-white;
+            transition: all 0.3s ease-in-out;
+
+            & svg {
+                margin-right: 0.7rem;
+                font-size: 1.8rem;
+            }
+
+            &:hover {
+                background-color: darken(#121d33, 5%);
+                color: #0c6cf2;
+            }
+
+            @include respond(tablet) {
+                flex-direction: column;
+            }
+        }
+
+        @include respond(tablet) {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    @include respond(tablet) {
+        bottom: 0;
+        height: auto;
+        width: 100%;
+    }
+}

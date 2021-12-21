@@ -1,0 +1,33 @@
+.home {
+    &-heading {
+        display: flex;
+        align-items: center;
+    }
+
+    &-logo {
+        height: 3.5rem;
+        width: 3.5rem;
+        margin-right: 1rem;
+    }
+}
+
+.table {
+    width: 100%;
+    margin-top: 3rem;
+    font-size: 1.6rem;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    & td,
+    & th {
+        border-bottom: 1px solid #ddd;
+        padding: 1rem;
+    }
+
+    & th {
+        padding-top: 1.4rem;
+        padding-bottom: 1.4rem;
+        text-align: left;
+        color: #677185;
+    }
+}

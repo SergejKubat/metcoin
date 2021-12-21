@@ -1,0 +1,8 @@
+.page {
+    margin-left: 25rem;
+    padding: 1.6rem;
+
+    @include respond(tablet) {
+        margin-left: 0;
+    }
+}
