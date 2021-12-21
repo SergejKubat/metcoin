@@ -1,0 +1,48 @@
+// MEDIA QUERY MANAGER
+/*
+0 - 320px: Mobile S
+320px - 375px: Mobile M
+375px - 425px: Mobile L
+425px - 768px: Tablet
+768px - 1024px: Laptop
+1024px - 1440px: Laptop L
+1440px - 2560px: 4K
+*/
+
+@mixin respond($breakpoint) {
+    @if $breakpoint == mobileS {
+        @media (max-width: 20em) {
+            @content;
+        }
+    }
+    @if $breakpoint == mobileM {
+        @media (max-width: 23.4375em) {
+            @content;
+        }
+    }
+    @if $breakpoint == mobileL {
+        @media (max-width: 26.5625em) {
+            @content;
+        }
+    }
+    @if $breakpoint == tablet {
+        @media (max-width: 48em) {
+            @content;
+        }
+    }
+    @if $breakpoint == laptop {
+        @media (max-width: 64em) {
+            @content;
+        }
+    }
+    @if $breakpoint == laptopL {
+        @media (max-width: 90em) {
+            @content;
+        }
+    }
+    @if $breakpoint == 4k {
+        @media (min-width: 160em) {
+            @content;
+        }
+    }
+}

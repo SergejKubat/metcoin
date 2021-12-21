@@ -1,48 +1,27 @@
-import React from "react";
+import React from 'react';
 
-import { Routes, Route, Link } from "react-router-dom";
-import { Layout, Typography, Space } from "antd";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import NavBar from "./components/Navbar";
-import HomePage from "./components/Home";
+import HomePage from './pages/Home';
+import WalletPage from './pages/Wallet';
+import BlockPage from './pages/Block';
+import TransactionPage from './pages/Transaction';
+import ChartsPage from './pages/Charts';
+
+import './assets/sass/app.scss';
 
 const App = () => {
-  return (
-    <div className="app">
-      <header className="navbar">
-        <NavBar />
-      </header>
-      <main className="main">
-        <Layout>
-          <div className="routes">
+    return (
+        <Router>
             <Routes>
-              <Route exact path="/" element={<HomePage />} />
-              <Route path="/blocks" />
-              <Route path="/blocks/:hash" />
-              <Route path="/transactions" />
-              <Route path="/transactions/:hash" />
-              <Route path="/charts" />
-              <Route path="/info" />
+                <Route path="/" exact element={<HomePage />} />
+                <Route path="/wallet" element={<WalletPage />} />
+                <Route path="/blocks/:hash" element={<BlockPage />} />
+                <Route path="/transactions/:hash" element={<TransactionPage />} />
+                <Route path="/charts" element={<ChartsPage />} />
             </Routes>
-          </div>
-        </Layout>
-        <footer className="footer">
-          <Typography.Title
-            level={5}
-            style={{ color: "#fff", textAlign: "center" }}
-          >
-            Metcoin <br />
-            All rights reserved
-          </Typography.Title>
-          <Space>
-            <Link to="/">Home</Link>
-            <Link to="/charts">Charts</Link>
-            <Link to="/info">Info</Link>
-          </Space>
-        </footer>
-      </main>
-    </div>
-  );
+        </Router>
+    );
 };
 
 export default App;
