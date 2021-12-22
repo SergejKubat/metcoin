@@ -21,11 +21,6 @@ transaction_pool = TransactionPool()
 pubsub = PubSub(blockchain, transaction_pool)
 
 
-@app.route('/')
-def default():
-    return 'Test'
-
-
 @app.route('/blockchain')
 def route_blockchain():
     return jsonify(blockchain.to_json())
@@ -71,6 +66,11 @@ def route_wallet_info():
     return jsonify({'address': wallet.address, 'balance': wallet.balance})
 
 
+@app.route('/transactions')
+def route_transactions():
+    return jsonify(transaction_pool.transaction_data())
+
+
 ROOT_PORT = 5000
 PORT = ROOT_PORT
 
@@ -85,5 +85,23 @@ if (len(sys.argv) > 1 and sys.argv[1] == 'peer'):
         print('\n -- Successfully synchronized the local chain')
     except Exception as e:
         print(f'\n -- Error synchronizing: {e}')
+
+if (len(sys.argv) > 1 and sys.argv[1] == 'seed'):
+    for i in range(10):
+        blockchain.add_block([
+            Transaction(Wallet(), Wallet().address,
+                        random.randint(2, 100)).to_json(),
+            Transaction(Wallet(), Wallet().address,
+                        random.randint(2, 100)).to_json(),
+            Transaction(Wallet(), Wallet().address,
+                        random.randint(2, 100)).to_json(),
+            Transaction.reward_transaction(wallet).to_json()
+        ])
+
+    for i in range(3):
+        transaction_pool.set_transaction(
+            Transaction(Wallet(), Wallet().address,
+                        random.randint(2, 100))
+        )
 
 app.run(port=PORT)
