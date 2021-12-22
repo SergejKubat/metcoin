@@ -26,6 +26,14 @@ def route_blockchain():
     return jsonify(blockchain.to_json())
 
 
+@app.route('/blockchain/range')
+def route_blockchain_range():
+    start = int(request.args.get('start'))
+    end = int(request.args.get('end'))
+
+    return jsonify(blockchain.to_json()[start:end])
+
+
 @app.route('/blockchain/mine')
 def route_blockchain_mine():
     transaction_data = transaction_pool.transaction_data()
@@ -63,7 +71,14 @@ def route_wallet_transact():
 
 @app.route('/wallet/info')
 def route_wallet_info():
-    return jsonify({'address': wallet.address, 'balance': wallet.balance})
+    transaction_list = []
+
+    for block in blockchain.chain:
+        for transaction in block.data:
+            if wallet.address in transaction['output'].keys():
+                transaction_list.append(transaction)
+
+    return jsonify({'address': wallet.address, 'balance': wallet.balance, 'transactions': transaction_list})
 
 
 @app.route('/transactions')
@@ -89,10 +104,6 @@ if (len(sys.argv) > 1 and sys.argv[1] == 'peer'):
 if (len(sys.argv) > 1 and sys.argv[1] == 'seed'):
     for i in range(10):
         blockchain.add_block([
-            Transaction(Wallet(), Wallet().address,
-                        random.randint(2, 100)).to_json(),
-            Transaction(Wallet(), Wallet().address,
-                        random.randint(2, 100)).to_json(),
             Transaction(Wallet(), Wallet().address,
                         random.randint(2, 100)).to_json(),
             Transaction.reward_transaction(wallet).to_json()

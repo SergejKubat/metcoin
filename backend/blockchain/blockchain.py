@@ -47,7 +47,7 @@ class Blockchain:
             block = chain[i]
             last_block = chain[i - 1]
             Block.is_valid_block(last_block, block)
-        
+
         Blockchain.is_valid_transaction_chain(chain)
 
     @staticmethod
@@ -61,11 +61,11 @@ class Blockchain:
             for transaction_json in block.data:
                 transaction = Transaction.from_json(transaction_json)
 
-                if transaction.id in transaction_ids:
+                if transaction.hash in transaction_ids:
                     raise Exception(
-                        f'Transaction {transaction.id} is not unique')
+                        f'Transaction {transaction.hash} is not unique')
 
-                transaction_ids.add(transaction.id)
+                transaction_ids.add(transaction.hash)
 
                 if transaction.input == MINING_REWARD_INPUT:
                     if has_mining_reward:
@@ -85,7 +85,7 @@ class Blockchain:
 
                     if historic_balance != transaction.input['amount']:
                         raise Exception(
-                            f'Transaction {transaction.id} has an invalid '
+                            f'Transaction {transaction.hash} has an invalid '
                             'input amount'
                         )
 

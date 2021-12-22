@@ -5,6 +5,7 @@ from backend.utils.hex_to_binary import hex_to_binary
 from backend.config import MINE_RATE
 
 GENESIS_DATA = {
+    'number': 1,
     'timestamp': 1,
     'last_hash': 'genesis_last_hash',
     'hash': 'genesis_hash',
@@ -15,7 +16,8 @@ GENESIS_DATA = {
 
 
 class Block:
-    def __init__(self, timestamp, last_hash, hash, data, difficulty, nonce):
+    def __init__(self, number, timestamp, last_hash, hash, data, difficulty, nonce):
+        self.number = number
         self.timestamp = timestamp
         self.last_hash = last_hash
         self.hash = hash
@@ -26,6 +28,7 @@ class Block:
     def __repr__(self):
         return (
             'Block ('
+            f'number: {self.number}, '
             f'timestamp: {self.timestamp}, '
             f'last_hash: {self.last_hash}, '
             f'hash: {self.hash}, '
@@ -41,21 +44,24 @@ class Block:
 
     @staticmethod
     def mine_block(last_block, data):
+        number = last_block.number + 1
         timestamp = time.time_ns()
         last_hash = last_block.hash
 
         difficulty = Block.adjust_difficulty(last_block, timestamp)
         nonce = 0
 
-        hash = crypto_hash(timestamp, last_hash, data, difficulty, nonce)
+        hash = crypto_hash(number, timestamp, last_hash,
+                           data, difficulty, nonce)
 
         while hex_to_binary(hash)[0:difficulty] != '0' * difficulty:
             nonce += 1
             timestamp = time.time_ns()
             difficulty = Block.adjust_difficulty(last_block, timestamp)
-            hash = crypto_hash(timestamp, last_hash, data, difficulty, nonce)
+            hash = crypto_hash(number, timestamp, last_hash,
+                               data, difficulty, nonce)
 
-        return Block(timestamp, last_hash, hash, data, difficulty, nonce)
+        return Block(number, timestamp, last_hash, hash, data, difficulty, nonce)
 
     @staticmethod
     def genesis():
@@ -87,6 +93,7 @@ class Block:
             raise Exception('The block difficulty must only adjust by 1.')
 
         reconstructed_hash = crypto_hash(
+            block.number,
             block.timestamp,
             block.last_hash,
             block.data,
@@ -94,8 +101,12 @@ class Block:
             block.difficulty
         )
 
+        print(f'{block.number} - {block.timestamp} - {block.last_hash} - {block.data} - {block.nonce} - {block.difficulty}')
+        print(f'hash: {block.hash}')
+        print(f'reconstructed hash: {reconstructed_hash}')
+
         if block.hash != reconstructed_hash:
-            raise Exception('The block hash must be correct.')
+            raise Exception(f'The block hash must be correct.')
 
 
 if __name__ == '__main__':

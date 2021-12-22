@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Moment from 'react-moment';
 
 const BlockList = () => {
     const [blocks, setBlocks] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setLoading(true);
         axios
             .get('http://127.0.0.1:5000/blockchain')
             .then((response) => {
-                setBlocks(response.data.slice(1));
+                setBlocks(response.data.slice(1).reverse());
             })
             .catch((error) => {
                 console.log(error);
@@ -43,12 +43,14 @@ const BlockList = () => {
                                 blocks.map((block) => (
                                     <tr key={block.hash}>
                                         <td>
-                                            <Link to={`/blocks/${block.hash}`}>123</Link>
+                                            <Link to={`/blocks/${block.hash}`}>{block.number}</Link>
                                         </td>
                                         <td>
                                             <Link to={`/blocks/${block.hash}`}>{block.hash}</Link>
                                         </td>
-                                        <td>{new Date(block.timestamp / 1000).toISOString()}</td>
+                                        <td>
+                                            <Moment fromNow>{new Date(block.timestamp / 1000000).toISOString()}</Moment>
+                                        </td>
                                         <td>
                                             <Link to={`/address/${Object.keys(block.data[block.data.length - 1].output)[0]}`}>
                                                 {Object.keys(block.data[block.data.length - 1].output)[0]}

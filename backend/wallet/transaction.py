@@ -1,7 +1,7 @@
-import uuid
 import time
 
 from backend.wallet.wallet import Wallet
+from backend.utils.crypto_hash import crypto_hash
 from backend.config import MINING_REWARD, MINING_REWARD_INPUT
 
 
@@ -11,17 +11,17 @@ class Transaction:
         sender_wallet=None,
         recipient=None,
         amount=None,
-        id=None,
+        hash=None,
         input=None,
         output=None
     ):
-        self.id = id or str(uuid.uuid4())[0:8]
         self.output = output or self.create_output(
             sender_wallet,
             recipient,
             amount
         )
         self.input = input or self.create_input(sender_wallet, self.output)
+        self.hash = hash or crypto_hash(self.input, self.output)
 
     def create_output(self, sender_wallet, recipient, amount):
         if amount > sender_wallet.balance:
