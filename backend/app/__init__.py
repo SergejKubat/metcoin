@@ -102,12 +102,12 @@ if (len(sys.argv) > 1 and sys.argv[1] == 'peer'):
         print(f'\n -- Error synchronizing: {e}')
 
 if (len(sys.argv) > 1 and sys.argv[1] == 'seed'):
-    for i in range(10):
-        blockchain.add_block([
-            Transaction(Wallet(), Wallet().address,
-                        random.randint(2, 100)).to_json(),
-            Transaction.reward_transaction(wallet).to_json()
-        ])
+    # for i in range(10):
+    blockchain.add_block([
+        Transaction(Wallet(), Wallet().address,
+                    random.randint(2, 100)).to_json(),
+        Transaction.reward_transaction(wallet).to_json()
+    ])
 
     for i in range(3):
         transaction_pool.set_transaction(

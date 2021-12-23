@@ -97,19 +97,28 @@ class Block:
             block.timestamp,
             block.last_hash,
             block.data,
-            block.nonce,
-            block.difficulty
+            block.difficulty,
+            block.nonce
         )
 
-        print(f'{block.number} - {block.timestamp} - {block.last_hash} - {block.data} - {block.nonce} - {block.difficulty}')
-        print(f'hash: {block.hash}')
-        print(f'reconstructed hash: {reconstructed_hash}')
+        # print(f'{last_block}')
+        # print(f'{block}')
+        # print(f'hash: {block.hash}')
+        # print(f'reconstructed hash: {reconstructed_hash}')
 
         if block.hash != reconstructed_hash:
             raise Exception(f'The block hash must be correct.')
 
 
-if __name__ == '__main__':
+def main():
     genesis_block = Block.genesis()
     block = Block.mine_block(genesis_block, 'foo')
-    print(block)
+
+    try:
+        Block.is_valid_block(genesis_block, block)
+    except Exception as e:
+        print(f'is_valid_block: {e}')
+
+
+if __name__ == '__main__':
+    main()

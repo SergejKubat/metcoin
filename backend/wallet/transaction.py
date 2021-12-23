@@ -1,7 +1,7 @@
 import time
+import uuid
 
 from backend.wallet.wallet import Wallet
-from backend.utils.crypto_hash import crypto_hash
 from backend.config import MINING_REWARD, MINING_REWARD_INPUT
 
 
@@ -11,17 +11,17 @@ class Transaction:
         sender_wallet=None,
         recipient=None,
         amount=None,
-        hash=None,
-        input=None,
-        output=None
+        id=None,
+        output=None,
+        input=None
     ):
+        self.id = id or ''.join(str(uuid.uuid4()).split('-'))
         self.output = output or self.create_output(
             sender_wallet,
             recipient,
             amount
         )
         self.input = input or self.create_input(sender_wallet, self.output)
-        self.hash = hash or crypto_hash(self.input, self.output)
 
     def create_output(self, sender_wallet, recipient, amount):
         if amount > sender_wallet.balance:
@@ -51,8 +51,8 @@ class Transaction:
         else:
             self.output[recipient] = amount
 
-        self.output[sender_wallet.address] = self.output[
-            sender_wallet.address] - amount
+        self.output[sender_wallet.address] = \
+            self.output[sender_wallet.address] - amount
 
         self.input = self.create_input(sender_wallet, self.output)
 
@@ -65,8 +65,8 @@ class Transaction:
 
     @staticmethod
     def is_valid_transaction(transaction):
-        if transaction.input == MINING_REWARD:
-            if list(transaction.output.value()) != [MINING_REWARD]:
+        if transaction.input == MINING_REWARD_INPUT:
+            if list(transaction.output.values()) != [MINING_REWARD]:
                 raise Exception('Invalid mining reward')
             return
 
@@ -92,7 +92,11 @@ class Transaction:
 
 def main():
     transaction = Transaction(Wallet(), 'recipient', 15)
-    print(transaction.__dict__)
+    print(f'transaction.__dict__: {transaction.__dict__}')
+
+    transaction_json = transaction.to_json()
+    restored_transaction = Transaction.from_json(transaction_json)
+    print(f'restored_transaction.__dict__: {restored_transaction.__dict__}')
 
 
 if __name__ == '__main__':
