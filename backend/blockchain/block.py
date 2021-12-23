@@ -101,11 +101,6 @@ class Block:
             block.nonce
         )
 
-        # print(f'{last_block}')
-        # print(f'{block}')
-        # print(f'hash: {block.hash}')
-        # print(f'reconstructed hash: {reconstructed_hash}')
-
         if block.hash != reconstructed_hash:
             raise Exception(f'The block hash must be correct.')
 

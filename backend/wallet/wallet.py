@@ -1,6 +1,7 @@
-import uuid
 import json
+import uuid
 
+from backend.config import STARTING_BALANCE
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.asymmetric.utils import (
@@ -21,7 +22,7 @@ class Wallet:
         )
         self.public_key = self.private_key.public_key()
         self.serialize_public_key()
-    
+
     @property
     def balance(self):
         return Wallet.calculate_balance(self.blockchain, self.address)
@@ -29,23 +30,20 @@ class Wallet:
     def sign(self, data):
         return decode_dss_signature(self.private_key.sign(
             json.dumps(data).encode('utf-8'),
-            ec.ECDSA(hashes.SHA256())))
+            ec.ECDSA(hashes.SHA256())
+        ))
 
     def serialize_public_key(self):
-        self.public_key_bytes = self.public_key.public_bytes(
+        self.public_key = self.public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo
-        )
-
-        decoded_public_key = self.public_key_bytes.decode('utf-8')
-
-        self.public_key = decoded_public_key
+        ).decode('utf-8')
 
     @staticmethod
     def verify(public_key, data, signature):
         deserialized_public_key = serialization.load_pem_public_key(
             public_key.encode('utf-8'),
-            default_backend
+            default_backend()
         )
 
         (r, s) = signature
@@ -54,14 +52,15 @@ class Wallet:
             deserialized_public_key.verify(
                 encode_dss_signature(r, s),
                 json.dumps(data).encode('utf-8'),
-                ec.ECDSA(hashes.SHA256()))
+                ec.ECDSA(hashes.SHA256())
+            )
             return True
         except InvalidSignature:
             return False
 
     @staticmethod
     def calculate_balance(blockchain, address):
-        balance = 1000
+        balance = STARTING_BALANCE
 
         if not blockchain:
             return balance
@@ -70,7 +69,6 @@ class Wallet:
             for transaction in block.data:
                 if transaction['input']['address'] == address:
                     balance = transaction['output'][address]
-
                 elif address in transaction['output']:
                     balance += transaction['output'][address]
 
@@ -79,7 +77,17 @@ class Wallet:
 
 def main():
     wallet = Wallet()
-    print(f'Wallet: {wallet.__dict__}')
+    print(f'wallet.__dict__: {wallet.__dict__}')
+
+    data = {'foo': 'bar'}
+    signature = wallet.sign(data)
+    print(f'signature: {signature}')
+
+    should_be_valid = Wallet.verify(wallet.public_key, data, signature)
+    print(f'should_be_valid: {should_be_valid}')
+
+    should_be_invalid = Wallet.verify(Wallet().public_key, data, signature)
+    print(f'should_be_invalid: {should_be_invalid}')
 
 
 if __name__ == '__main__':
