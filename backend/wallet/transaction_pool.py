@@ -1,3 +1,5 @@
+from backend.wallet.transaction import Transaction
+
 class TransactionPool:
     def __init__(self):
         self.transaction_map = {}
@@ -23,3 +25,12 @@ class TransactionPool:
                     del self.transaction_map[transaction['id']]
                 except KeyError:
                     pass
+
+    @staticmethod
+    def from_json(pool_json):
+        transaction_pool = TransactionPool()
+        transaction_list = list(map(lambda transaction_json: Transaction.from_json(transaction_json), pool_json))
+        for transaction in transaction_list:
+            transaction_pool.set_transaction(transaction)
+        
+        return transaction_pool

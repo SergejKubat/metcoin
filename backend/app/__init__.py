@@ -89,30 +89,46 @@ def route_transactions():
 ROOT_PORT = 5000
 PORT = ROOT_PORT
 
-if (len(sys.argv) > 1 and sys.argv[1] == 'peer'):
-    PORT = random.randint(5001, 6000)
+if (len(sys.argv) > 1):
+    if (sys.argv[1] == 'peer'):
+        PORT = random.randint(5001, 6000)
 
-    result = requests.get(f'http://localhost:{ROOT_PORT}/blockchain')
-    result_blockchain = Blockchain.from_json(result.json())
+        result_blockchain_json = requests.get(
+            f'http://localhost:{ROOT_PORT}/blockchain')
+        result_blockchain = Blockchain.from_json(result_blockchain_json.json())
 
-    try:
-        blockchain.replace_chain(result_blockchain.chain)
-        print('\n -- Successfully synchronized the local chain')
-    except Exception as e:
-        print(f'\n -- Error synchronizing: {e}')
+        try:
+            blockchain.replace_chain(result_blockchain.chain)
+            print('\n -- Successfully synchronized the local chain --')
 
-if (len(sys.argv) > 1 and sys.argv[1] == 'seed'):
-    # for i in range(10):
-    blockchain.add_block([
-        Transaction(Wallet(), Wallet().address,
-                    random.randint(2, 100)).to_json(),
-        Transaction.reward_transaction(wallet).to_json()
-    ])
+            result_transactions_json = requests.get(
+                f'http://localhost:{ROOT_PORT}/transactions')
+            transaction_pool = TransactionPool.from_json(
+                result_transactions_json.json())
 
-    for i in range(3):
-        transaction_pool.set_transaction(
-            Transaction(Wallet(), Wallet().address,
-                        random.randint(2, 100))
-        )
+            print('\n -- Successfully synchronized the transaction pool --')
+        except Exception as e:
+            print(f'\n -- Error synchronizing: {e}')
+
+    elif (sys.argv[1] == 'seed'):
+        print('\033[92mCreating blockchain seed...')
+        for i in range(random.randint(5, 20)):
+            transaction_list = []
+
+            for y in range(random.randint(3, 7)):
+                transaction_list.append(Transaction(
+                    Wallet(), Wallet().address, random.randint(1, 250)).to_json())
+
+            transaction_list.append(
+                Transaction.reward_transaction(wallet).to_json())
+
+            blockchain.add_block(transaction_list)
+            print(f'\033[94m{len(blockchain.chain)}. block mined!')
+
+        for i in range(random.randint(3, 7)):
+            transaction_pool.set_transaction(
+                Transaction(Wallet(), Wallet().address,
+                            random.randint(1, 250))
+            )
 
 app.run(port=PORT)

@@ -80,7 +80,7 @@ class Transaction:
             transaction.output,
             transaction.input['signature']
         ):
-            raise Exception('Invalid signature')
+            raise Exception(f'Invalid signature: {transaction.id}')
 
     @staticmethod
     def reward_transaction(miner_wallet):

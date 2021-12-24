@@ -15,7 +15,7 @@ from cryptography.exceptions import InvalidSignature
 class Wallet:
     def __init__(self, blockchain=None):
         self.blockchain = blockchain
-        self.address = str(uuid.uuid4())[0:8]
+        self.address = ''.join(str(uuid.uuid4()).split('-'))
         self.private_key = ec.generate_private_key(
             ec.SECP256K1(),
             default_backend()
@@ -29,7 +29,7 @@ class Wallet:
 
     def sign(self, data):
         return decode_dss_signature(self.private_key.sign(
-            json.dumps(data).encode('utf-8'),
+            json.dumps(data, sort_keys=True).encode('utf-8'),
             ec.ECDSA(hashes.SHA256())
         ))
 
