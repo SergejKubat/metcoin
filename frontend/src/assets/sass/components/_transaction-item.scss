@@ -1,0 +1,30 @@
+.transaction-item {
+    margin: 1.6rem 0;
+    font-size: 1.6rem;
+
+    &-hash {
+        color: #677185;
+    }
+
+    &-timestamp {
+        font-weight: 500;
+    }
+
+    &-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & > div {
+            flex: 1;
+            flex-basis: 33.33333%;
+            width: 33.33333%;
+        }
+    }
+
+    &-icon {
+        height: 2.4rem;
+        width: 2.4rem;
+        color: #339f7b;
+    }
+}

@@ -34,16 +34,16 @@ const TransactionList = () => {
                         <tbody>
                             <tr>
                                 <th>Hash</th>
-                                <th>Sender</th>
-                                <th>Receiver</th>
+                                <th>From</th>
+                                <th>To</th>
                                 <th>Amount</th>
                                 <th>Time</th>
                             </tr>
                             {transactions &&
                                 transactions.map((transaction) => (
-                                    <tr key={transaction.hash}>
+                                    <tr key={transaction.id}>
                                         <td>
-                                            <Link to={`/transactions/${transaction.hash}`}>{transaction.hash}</Link>
+                                            <Link to={`/transactions/${transaction.id}`}>{transaction.id}</Link>
                                         </td>
                                         <td>
                                             <Link to={`/address/${transaction.input.address}`}>{transaction.input.address}</Link>

@@ -4,6 +4,7 @@ import random
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from werkzeug.exceptions import abort
 
 from backend.blockchain.blockchain import Blockchain
 from backend.wallet.wallet import Wallet
@@ -46,6 +47,15 @@ def route_blockchain_mine():
     return jsonify(block.to_json())
 
 
+@app.route('/blocks/<hash>')
+def route_block_data(hash):
+    for block in blockchain.chain:
+        if (block.hash == hash):
+            return jsonify(block.to_json())
+
+    abort(404)
+
+
 @app.route('/wallet/transact', methods=['POST'])
 def route_wallet_transact():
     transaction_data = request.get_json()
@@ -86,6 +96,22 @@ def route_transactions():
     return jsonify(transaction_pool.transaction_data())
 
 
+@app.route('/transactions/<id>')
+def route_transaction_data(id):
+    transaction_data = transaction_pool.transaction_data()
+
+    for transaction in transaction_data:
+        if (transaction['id'] == id):
+            return jsonify(transaction)
+
+    for block in blockchain.chain:
+        for transaction in block.data:
+            if (transaction['id'] == id):
+                return jsonify(transaction)
+
+    abort(404)
+
+
 ROOT_PORT = 5000
 PORT = ROOT_PORT
 
@@ -112,7 +138,7 @@ if (len(sys.argv) > 1):
 
     elif (sys.argv[1] == 'seed'):
         print('\033[92mCreating blockchain seed...')
-        for i in range(random.randint(5, 20)):
+        for i in range(random.randint(5, 10)):
             transaction_list = []
 
             for y in range(random.randint(3, 7)):
