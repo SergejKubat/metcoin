@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
+import Moment from 'react-moment';
 import { Link, useParams } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { AiFillCopy } from 'react-icons/ai';
 
 const TransactionPage = () => {
     const [transaction, setTransaction] = useState({});
@@ -27,22 +30,93 @@ const TransactionPage = () => {
             {!loading && (
                 <div>
                     <h1>Transaction Details</h1>
-                    <p>Hash: {transaction.id}</p>
-                    <p>Status: Confirmed</p>
-                    <p>Timestamp: {new Date(transaction.input.timestamp / 1000000).toISOString()}</p>
-                    <p>Included in block: Transaction Pool</p>
-                    <p>Total amount: {transaction.input.amount - transaction.output[transaction.input.address]} MTC</p>
-                    <p>Number of recipients: {Object.keys(transaction.output).length - 1}</p>
-                    <h2>Input</h2>
-                    <p>
-                        Address: <Link to={`/address/${transaction.input.address}`}>{transaction.input.address}</Link>
-                    </p>
-                    <p>Public key: {transaction.input.public_key}</p>
-                    <p>
-                        Signature: {transaction.input.signature[0]} <br /> {transaction.input.signature[1]}
-                    </p>
-                    <p>Amount: {transaction.input.amount}</p>
-                    <h2>Output</h2>
+                    <div className="details-row">
+                        <div className="details-col">Hash</div>
+                        <div className="details-col">{transaction.data.id}</div>
+                    </div>
+                    <div className="details-row">
+                        <div className="details-col">Status</div>
+                        <div className="details-col">
+                            <span
+                                className="transaction-item-status"
+                                style={{
+                                    color: transaction.status === 'Confirmed' ? '#28a745' : '#dc3545',
+                                    backgroundColor: transaction.status === 'Confirmed' ? '#d1f0db' : '#f5d9d7'
+                                }}>
+                                {transaction.status}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="details-row">
+                        <div className="details-col">Timestamp</div>
+                        <div className="details-col">
+                            <Moment format="DD/MM/YYYY hh:mm:ss">
+                                {new Date(transaction.data.input.timestamp / 1000000).toISOString()}
+                            </Moment>
+                        </div>
+                    </div>
+                    <div className="details-row">
+                        <div className="details-col">Included in Block</div>
+                        <div className="details-col">
+                            {transaction.block === 'Transaction Pool' ? (
+                                <span>Transaction Pool</span>
+                            ) : (
+                                <Link to={`/blocks/${transaction.block}`}>{transaction.block}</Link>
+                            )}
+                        </div>
+                    </div>
+                    <div className="details-row">
+                        <div className="details-col">Total amount</div>
+                        <div className="details-col">
+                            {transaction.data.input.amount - transaction.data.output[transaction.data.input.address]} MTC
+                        </div>
+                    </div>
+                    <div className="details-row">
+                        <div className="details-col">Number of recipients:</div>
+                        <div className="details-col">{Object.keys(transaction.data.output).length - 1}</div>
+                    </div>
+                    <h2 style={{ marginTop: '2rem' }}>Input</h2>
+                    <div className="transaction-row">
+                        <div className="transaction-col">Address</div>
+                        <div className="transaction-col">
+                            <Link to={`/address/${transaction.data.input.address}`}>{transaction.data.input.address}</Link>
+                            <CopyToClipboard text={`${transaction.data.input.address}`}>
+                                <AiFillCopy className="icon-copy" />
+                            </CopyToClipboard>
+                        </div>
+                    </div>
+                    <div className="transaction-row">
+                        <div className="transaction-col">Public key</div>
+                        <div className="transaction-col">{transaction.data.input.public_key}</div>
+                    </div>
+                    <div className="transaction-row">
+                        <div className="transaction-col">Signature</div>
+                        <div className="transaction-col">
+                            {transaction.data.input.signature[0]} <br /> {transaction.data.input.signature[1]}
+                        </div>
+                    </div>
+                    <div className="transaction-row">
+                        <div className="transaction-col">Amount</div>
+                        <div className="transaction-col">{transaction.data.input.amount} MTC</div>
+                    </div>
+                    <h2 style={{ marginTop: '2rem' }}>Output</h2>
+                    {Object.keys(transaction.data.output).map((item) => (
+                        <div key={item}>
+                            <div className="transaction-row">
+                                <div className="transaction-col">Address</div>
+                                <div className="transaction-col">
+                                    <Link to={`/address/${item}`}>{item}</Link>
+                                    <CopyToClipboard text={`${item}`}>
+                                        <AiFillCopy className="icon-copy" />
+                                    </CopyToClipboard>
+                                </div>
+                            </div>
+                            <div className="transaction-row">
+                                <div className="transaction-col">Amount</div>
+                                <div className="transaction-col">{transaction.data.output[item]} MTC</div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             )}
         </React.Fragment>

@@ -40,3 +40,14 @@ a {
         color: darken(#0c6cf2, 10%);
     }
 }
+
+.icon-copy {
+    margin: 0 3px;
+    vertical-align: text-bottom;
+    fill: #50596b;
+    cursor: pointer;
+
+    &:hover {
+        fill: #0c6cf2;
+    }
+}

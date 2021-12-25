@@ -102,12 +102,12 @@ def route_transaction_data(id):
 
     for transaction in transaction_data:
         if (transaction['id'] == id):
-            return jsonify(transaction)
+            return jsonify({'data': transaction, 'status': 'Unconfirmed', 'block': 'Transaction Pool'})
 
     for block in blockchain.chain:
         for transaction in block.data:
             if (transaction['id'] == id):
-                return jsonify(transaction)
+                return jsonify({'data': transaction, 'status': 'Confirmed', 'block': block.hash})
 
     abort(404)
 

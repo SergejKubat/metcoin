@@ -4,7 +4,9 @@
 @import 'base/base';
 @import 'base/typography';
 
+@import 'components/button';
 @import 'components/create-transaction';
+@import 'components/details';
 @import 'components/transaction-item';
 
 @import 'layouts/footer';
@@ -12,3 +14,5 @@
 @import 'layouts/navigation';
 
 @import 'pages/home';
+@import 'pages/transaction';
+@import 'pages/wallet';

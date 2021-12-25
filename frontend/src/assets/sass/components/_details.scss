@@ -1,0 +1,22 @@
+.details {
+    padding: 1.5rem 0;
+
+    &-row {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #dfe3eb;
+    }
+
+    &-col {
+        width: 50%;
+        padding: 0.8rem 0;
+        font-size: 1.6rem;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        
+        &:first-child {
+            color: #677185;
+        }
+    }
+}

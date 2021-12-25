@@ -1,0 +1,22 @@
+.wallet {
+    margin-top: 4rem;
+
+    &-container {
+        display: flex;
+        gap: 3rem;
+        width: 100%;
+        margin-bottom: 4rem;
+    }
+
+    &-qr {
+        padding: 2rem 3rem;
+        border: 1px solid #f0f2f7;
+    }
+
+    &-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+    }
+}

@@ -1,7 +1,11 @@
 import React from 'react';
 
 const Footer = () => {
-    return <footer>Footer</footer>;
+    return (
+        <footer className="footer" style={{ marginTop: '5rem' }}>
+            Footer
+        </footer>
+    );
 };
 
 export default Footer;

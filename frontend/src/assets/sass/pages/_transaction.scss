@@ -1,0 +1,18 @@
+.transaction {
+    &-row {
+        display: flex;
+    }
+
+    &-col {
+        padding: 0.8rem 0;
+        font-size: 1.6rem;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:first-child {
+            width: 100px;
+            color: #677185;
+        }
+    }
+}

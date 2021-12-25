@@ -30,7 +30,7 @@ const CreateTransaction = () => {
 
     return (
         <div className="ct">
-            <h3 className="ct-heading">Transfer Metcoin</h3>
+            <h2>Transfer Metcoin</h2>
             <form className="form" onSubmit={transfer}>
                 <label htmlFor="recipient" className="form-label">
                     Recipient:
