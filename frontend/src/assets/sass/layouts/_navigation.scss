@@ -1,5 +1,6 @@
 .navbar {
     position: fixed;
+    top: 7rem;
     width: 25rem;
     height: 100%;
     background-color: #121d33;
@@ -19,7 +20,7 @@
             }
 
             &:hover {
-                background-color: darken(#121d33, 5%);
+                background-color: darken(#121d33, 3%);
                 color: #0c6cf2;
             }
 

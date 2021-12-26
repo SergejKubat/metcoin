@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineHome, AiOutlineWallet, AiOutlineBlock, AiOutlineTransaction, AiOutlineBarChart } from 'react-icons/ai';
 
-const Navigation = () => {
+const SideBar = () => {
     return (
         <nav className="navbar">
             <ul className="navbar-list">
@@ -42,4 +42,4 @@ const Navigation = () => {
     );
 };
 
-export default Navigation;
+export default SideBar;

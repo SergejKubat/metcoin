@@ -1,12 +1,14 @@
 import React from 'react';
 
-import Navigation from './Navigation';
+import Header from './Header';
+import SideBar from './SideBar';
 import Footer from './Footer';
 
 const Layout = ({ children }) => {
     return (
         <React.Fragment>
-            <Navigation />
+            <Header />
+            <SideBar />
             <div className="page">
                 {children}
                 <Footer />
