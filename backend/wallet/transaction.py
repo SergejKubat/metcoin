@@ -2,7 +2,7 @@ import time
 import uuid
 
 from backend.wallet.wallet import Wallet
-from backend.config import MINING_REWARD, MINING_REWARD_INPUT
+from backend.config import MINING_REWARD, MINING_REWARD_ADDRESS
 
 
 class Transaction:
@@ -65,7 +65,7 @@ class Transaction:
 
     @staticmethod
     def is_valid_transaction(transaction):
-        if transaction.input == MINING_REWARD_INPUT:
+        if transaction.input['address'] == MINING_REWARD_ADDRESS:
             if list(transaction.output.values()) != [MINING_REWARD]:
                 raise Exception('Invalid mining reward')
             return
@@ -87,7 +87,7 @@ class Transaction:
         output = {}
         output[miner_wallet.address] = MINING_REWARD
 
-        return Transaction(input=MINING_REWARD_INPUT, output=output)
+        return Transaction(input={'address': MINING_REWARD_ADDRESS, 'timestamp': time.time_ns()}, output=output)
 
 
 def main():

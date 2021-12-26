@@ -32,7 +32,7 @@ def route_blockchain_range():
     start = int(request.args.get('start'))
     end = int(request.args.get('end'))
 
-    return jsonify(blockchain.to_json()[start:end])
+    return jsonify(blockchain.to_json()[::-1][start:end])
 
 
 @app.route('/blockchain/mine')
@@ -91,9 +91,30 @@ def route_wallet_info():
     return jsonify({'address': wallet.address, 'balance': wallet.balance, 'transactions': transaction_list})
 
 
+@app.route('/wallet/<address>')
+def route_wallet_address(address):
+    balance = Wallet.calculate_balance(blockchain, address)
+    transaction_list = []
+
+    for block in blockchain.chain:
+        for transaction in block.data:
+            if address in transaction['output'].keys():
+                transaction_list.append(transaction)
+
+    return jsonify({'address': address, 'balance': balance, 'transactions': transaction_list})
+
+
 @app.route('/transactions')
 def route_transactions():
-    return jsonify(transaction_pool.transaction_data())
+    return jsonify(transaction_pool.transaction_data()[::-1])
+
+
+@app.route('/transactions/range')
+def route_transactions_range():
+    start = int(request.args.get('start'))
+    end = int(request.args.get('end'))
+
+    return jsonify(transaction_pool.transaction_data()[::-1][start:end])
 
 
 @app.route('/transactions/<id>')
@@ -141,7 +162,7 @@ if (len(sys.argv) > 1):
         for i in range(random.randint(5, 10)):
             transaction_list = []
 
-            for y in range(random.randint(3, 7)):
+            for y in range(random.randint(5, 8)):
                 transaction_list.append(Transaction(
                     Wallet(), Wallet().address, random.randint(1, 250)).to_json())
 
@@ -151,7 +172,7 @@ if (len(sys.argv) > 1):
             blockchain.add_block(transaction_list)
             print(f'\033[94m{len(blockchain.chain)}. block mined!')
 
-        for i in range(random.randint(3, 7)):
+        for i in range(random.randint(5, 8)):
             transaction_pool.set_transaction(
                 Transaction(Wallet(), Wallet().address,
                             random.randint(1, 250))

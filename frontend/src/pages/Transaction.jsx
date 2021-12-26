@@ -6,6 +6,8 @@ import { Link, useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiFillCopy } from 'react-icons/ai';
 
+import { MINING_REWARD_ADDRESS } from 'config';
+
 const TransactionPage = () => {
     const [transaction, setTransaction] = useState({});
     const [loading, setLoading] = useState(true);
@@ -68,37 +70,51 @@ const TransactionPage = () => {
                     <div className="details-row">
                         <div className="details-col">Total amount</div>
                         <div className="details-col">
-                            {transaction.data.input.amount - transaction.data.output[transaction.data.input.address]} MTC
+                            {transaction.data.input.address === MINING_REWARD_ADDRESS ? (
+                                <span>{Object.values(transaction.data.output)[0]} MTC</span>
+                            ) : (
+                                <span>{transaction.data.input.amount - transaction.data.output[transaction.data.input.address]} MTC</span>
+                            )}
                         </div>
                     </div>
                     <div className="details-row">
                         <div className="details-col">Number of recipients:</div>
-                        <div className="details-col">{Object.keys(transaction.data.output).length - 1}</div>
+                        <div className="details-col">{Object.keys(transaction.data.output).length}</div>
                     </div>
                     <h2 style={{ marginTop: '2rem' }}>Input</h2>
                     <div className="transaction-row">
                         <div className="transaction-col">Address</div>
                         <div className="transaction-col">
-                            <Link to={`/address/${transaction.data.input.address}`}>{transaction.data.input.address}</Link>
-                            <CopyToClipboard text={`${transaction.data.input.address}`}>
-                                <AiFillCopy className="icon-copy" />
-                            </CopyToClipboard>
+                            {transaction.data.input.address === MINING_REWARD_ADDRESS ? (
+                                <span>{transaction.data.input.address}</span>
+                            ) : (
+                                <span>
+                                    <Link to={`/address/${transaction.data.input.address}`}>{transaction.data.input.address}</Link>
+                                    <CopyToClipboard text={`${transaction.data.input.address}`}>
+                                        <AiFillCopy className="icon-copy" />
+                                    </CopyToClipboard>
+                                </span>
+                            )}
                         </div>
                     </div>
-                    <div className="transaction-row">
-                        <div className="transaction-col">Public key</div>
-                        <div className="transaction-col">{transaction.data.input.public_key}</div>
-                    </div>
-                    <div className="transaction-row">
-                        <div className="transaction-col">Signature</div>
-                        <div className="transaction-col">
-                            {transaction.data.input.signature[0]} <br /> {transaction.data.input.signature[1]}
+                    {transaction.data.input.address !== MINING_REWARD_ADDRESS ? (
+                        <div>
+                            <div className="transaction-row">
+                                <div className="transaction-col">Public key</div>
+                                <div className="transaction-col">{transaction.data.input.public_key}</div>
+                            </div>
+                            <div className="transaction-row">
+                                <div className="transaction-col">Signature</div>
+                                <div className="transaction-col">
+                                    {transaction.data.input.signature[0]} <br /> {transaction.data.input.signature[1]}
+                                </div>
+                            </div>
+                            <div className="transaction-row">
+                                <div className="transaction-col">Amount</div>
+                                <div className="transaction-col">{transaction.data.input.amount} MTC</div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="transaction-row">
-                        <div className="transaction-col">Amount</div>
-                        <div className="transaction-col">{transaction.data.input.amount} MTC</div>
-                    </div>
+                    ) : null}
                     <h2 style={{ marginTop: '2rem' }}>Output</h2>
                     {Object.keys(transaction.data.output).map((item) => (
                         <div key={item}>

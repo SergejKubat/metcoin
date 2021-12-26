@@ -2,23 +2,25 @@ import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 import QRCode from 'react-qr-code';
+import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiFillCopy } from 'react-icons/ai';
 
-import CreateTransaction from 'components/CreateTransaction';
 import TransactionItem from 'components/TransactionItem';
 
 import { calculateTotalSpent } from 'utils/transaction';
 
-const WalletPage = () => {
-    const [wallet, setWallet] = useState({});
+const Address = () => {
+    const [address, setAddress] = useState({});
     const [loading, setLoading] = useState(true);
+
+    const { id } = useParams();
 
     useEffect(() => {
         axios
-            .get('http://127.0.0.1:5000/wallet/info')
+            .get(`http://127.0.0.1:5000/wallet/${id}`)
             .then((response) => {
-                setWallet(response.data);
+                setAddress(response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -26,59 +28,56 @@ const WalletPage = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, []);
+    }, [id]);
 
     return (
-        <div>
-            <h1>My Wallet</h1>
-            <h2>Information about my wallet</h2>
+        <React.Fragment>
+            <h1>Address Details</h1>
+            <h2>Information about address</h2>
             {loading ? (
                 <div>Loading...</div>
             ) : (
                 <div className="wallet">
                     <div className="wallet-container">
                         <div className="wallet-qr">
-                            <QRCode value={`metcoin:${wallet.address}`} size={200} />
+                            <QRCode value={`metcoin:${address.address}`} size={200} />
                         </div>
                         <div className="wallet-details">
                             <div className="details-row">
                                 <div className="details-col">Address</div>
                                 <div className="details-col">
-                                    {wallet.address}{' '}
-                                    <CopyToClipboard text={`${wallet.address}`}>
+                                    {address.address}{' '}
+                                    <CopyToClipboard text={`${address.address}`}>
                                         <AiFillCopy className="icon-copy" />
                                     </CopyToClipboard>
                                 </div>
                             </div>
                             <div className="details-row">
                                 <div className="details-col">Total received</div>
-                                <div className="details-col">
-                                    {wallet.balance + calculateTotalSpent(wallet.transactions, wallet.address)} MTC
-                                </div>
+                                <div className="details-col">{address.balance + calculateTotalSpent(address.transactions, address.address)} MTC</div>
                             </div>
                             <div className="details-row">
                                 <div className="details-col">Total sent</div>
-                                <div className="details-col">{calculateTotalSpent(wallet.transactions, wallet.address)} MTC</div>
+                                <div className="details-col">{calculateTotalSpent(address.transactions, address.address)} MTC</div>
                             </div>
                             <div className="details-row">
                                 <div className="details-col">Balance</div>
-                                <div className="details-col">{wallet.balance} MTC</div>
+                                <div className="details-col">{address.balance} MTC</div>
                             </div>
                             <div className="details-row">
                                 <div className="details-col">Number of Transactions:</div>
-                                <div className="details-col">{wallet.transactions.length}</div>
+                                <div className="details-col">{address.transactions.length}</div>
                             </div>
                         </div>
                     </div>
-                    <CreateTransaction />
                     <h2 style={{ marginTop: '2rem' }}>Transactions</h2>
-                    {wallet.transactions.map((transaction) => (
+                    {address.transactions.map((transaction) => (
                         <TransactionItem key={transaction.id} transaction={transaction} />
                     ))}
                 </div>
             )}
-        </div>
+        </React.Fragment>
     );
 };
 
-export default WalletPage;
+export default Address;

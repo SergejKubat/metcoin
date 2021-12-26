@@ -1,7 +1,7 @@
 from backend.blockchain.block import Block
 from backend.wallet.transaction import Transaction
 from backend.wallet.wallet import Wallet
-from backend.config import MINING_REWARD_INPUT
+from backend.config import MINING_REWARD_ADDRESS
 
 
 class Blockchain:
@@ -69,7 +69,7 @@ class Blockchain:
 
                 transaction_ids.add(transaction.id)
 
-                if transaction.input == MINING_REWARD_INPUT:
+                if transaction.input['address'] == MINING_REWARD_ADDRESS:
                     if has_mining_reward:
                         raise Exception(
                             'There can only be one mining reward per block. '

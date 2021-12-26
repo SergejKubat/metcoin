@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
+import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiFillCopy } from 'react-icons/ai';
-import Moment from 'react-moment';
 
 const BlockList = () => {
     const [blocks, setBlocks] = useState([]);

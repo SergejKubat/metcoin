@@ -9,6 +9,16 @@
         width: 3.5rem;
         margin-right: 1rem;
     }
+
+    &-details {
+        display: flex;
+        gap: 3rem;
+        margin-top: 3rem;
+
+        & > * {
+            width: 50%;
+        }
+    }
 }
 
 .table {

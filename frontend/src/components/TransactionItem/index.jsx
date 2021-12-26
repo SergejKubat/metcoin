@@ -6,6 +6,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ImArrowRight } from 'react-icons/im';
 import { AiFillCopy } from 'react-icons/ai';
 
+import { MINING_REWARD_ADDRESS } from 'config';
+
 const TransactionItem = ({ transaction }) => {
     const { input, output } = transaction;
     const recipients = Object.keys(output);
@@ -20,13 +22,26 @@ const TransactionItem = ({ transaction }) => {
             </p>
             <div className="transaction-item-container">
                 <div>
-                    <Link to={`/address/${input.address}`}>{input.address}</Link>
-                    <CopyToClipboard text={`${input.address}`}>
-                        <AiFillCopy className="icon-copy" />
-                    </CopyToClipboard>
+                    {input.address === MINING_REWARD_ADDRESS ? (
+                        <span>{MINING_REWARD_ADDRESS}</span>
+                    ) : (
+                        <span>
+                            <Link to={`/address/${input.address}`}>{input.address}</Link>
+                            <CopyToClipboard text={`${input.address}`}>
+                                <AiFillCopy className="icon-copy" />
+                            </CopyToClipboard>
+                        </span>
+                    )}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ marginRight: '1rem' }}>{input.amount - output[input.address]} MTC</span>
+                    <span style={{ marginRight: '1rem' }}>
+                        {input.address === MINING_REWARD_ADDRESS ? (
+                            <span>{Object.values(output)[0]}</span>
+                        ) : (
+                            <span>{input.amount - output[input.address]}</span>
+                        )}{' '}
+                        MTC
+                    </span>
                     <ImArrowRight className="transaction-item-icon" />
                 </div>
                 <div style={{ textAlign: 'right' }}>

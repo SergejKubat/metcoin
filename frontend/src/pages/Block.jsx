@@ -8,6 +8,8 @@ import { AiFillCopy } from 'react-icons/ai';
 
 import TransactionItem from 'components/TransactionItem';
 
+import { calcTransactionVolume } from 'utils/transaction';
+
 const BlockPage = () => {
     const [block, setBlock] = useState({});
     const [loading, setLoading] = useState(true);
@@ -26,14 +28,6 @@ const BlockPage = () => {
                 setLoading(false);
             });
     }, [hash]);
-
-    const calcTransactionVolume = (data) => {
-        return data.reduce((accumulator, current) => {
-            const recipients = Object.keys(current.output).filter((recipient) => recipient !== current.input.address);
-            recipients.forEach((recipient) => (accumulator += current.output[recipient]));
-            return accumulator;
-        }, 0);
-    };
 
     return (
         <React.Fragment>
@@ -92,7 +86,7 @@ const BlockPage = () => {
                         <div className="details-col">{Object.values(block.data[block.data.length - 1].output)[0]} MTC</div>
                     </div>
                     <h2 style={{ marginTop: '2rem' }}>Block Transactions</h2>
-                    {[...block.data].splice(0, block.data.length - 1).map((transaction) => (
+                    {block.data.map((transaction) => (
                         <TransactionItem key={transaction.id} transaction={transaction} />
                     ))}
                 </div>

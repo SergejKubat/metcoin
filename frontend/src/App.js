@@ -9,6 +9,7 @@ import TransactionList from 'pages/TransactionList';
 import ChartsPage from './pages/Charts';
 import BlockPage from './pages/Block';
 import TransactionPage from './pages/Transaction';
+import Address from 'pages/Address';
 
 import Layout from 'components/Layout/Layout';
 
@@ -25,6 +26,7 @@ const App = () => {
                     <Route path="/blocks" element={<BlockList />} />
                     <Route path="/transactions/:hash" element={<TransactionPage />} />
                     <Route path="/transactions" element={<TransactionList />} />
+                    <Route path="/address/:id" element={<Address />} />
                     <Route path="/charts" element={<ChartsPage />} />
                 </Routes>
             </Layout>

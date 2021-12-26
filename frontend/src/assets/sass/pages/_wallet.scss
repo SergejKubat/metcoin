@@ -6,6 +6,11 @@
         gap: 3rem;
         width: 100%;
         margin-bottom: 4rem;
+
+        @include respond(tablet) {
+            justify-content: center;
+            flex-wrap: wrap;
+        }
     }
 
     &-qr {
