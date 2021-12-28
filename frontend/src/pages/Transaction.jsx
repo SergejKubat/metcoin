@@ -6,6 +6,8 @@ import { Link, useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiFillCopy } from 'react-icons/ai';
 
+import Spinner from 'components/Spinner';
+
 import { MINING_REWARD_ADDRESS } from 'config';
 
 const TransactionPage = () => {
@@ -29,7 +31,9 @@ const TransactionPage = () => {
 
     return (
         <React.Fragment>
-            {!loading && (
+            {loading ? (
+                <Spinner />
+            ) : (
                 <div>
                     <h1>Transaction Details</h1>
                     <div className="details-row">

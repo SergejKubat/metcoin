@@ -1,6 +1,7 @@
 import sys
 import requests
 import random
+from collections import Counter
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -133,6 +134,37 @@ def route_transaction_data(id):
     abort(404)
 
 
+@app.route('/transactions-per-block')
+def route_transaction_per_block():
+    data = {
+        'block': [],
+        'transactions': []
+    }
+
+    for i in range(len(blockchain.chain)):
+        if (i == 0):
+            continue
+        data['block'].append(i + 1)
+        data['transactions'].append(len(blockchain.chain[i].data))
+
+    return jsonify(data)
+
+
+@app.route('/miner-percentage')
+def route_miner_percentage():
+    miners = []
+
+    for i in range(len(blockchain.chain)):
+        if (i == 0):
+            continue
+        data = blockchain.chain[i].data
+        miners.append(list(data[len(data) - 1]['output'].keys())[0])
+
+    miners_dict = dict(Counter(miners))
+
+    return jsonify(miners_dict)
+
+
 ROOT_PORT = 5000
 PORT = ROOT_PORT
 
@@ -146,23 +178,24 @@ if (len(sys.argv) > 1):
 
         try:
             blockchain.replace_chain(result_blockchain.chain)
-            print('\n -- Successfully synchronized the local chain --')
+            print('\033[92m \n -- Successfully synchronized the local chain --')
 
             result_transactions_json = requests.get(
                 f'http://localhost:{ROOT_PORT}/transactions')
             transaction_pool = TransactionPool.from_json(
                 result_transactions_json.json())
 
-            print('\n -- Successfully synchronized the transaction pool --')
+            print(
+                '\033[92m \n -- Successfully synchronized the transaction pool --')
         except Exception as e:
             print(f'\n -- Error synchronizing: {e}')
 
     elif (sys.argv[1] == 'seed'):
         print('\033[92mCreating blockchain seed...')
-        for i in range(random.randint(5, 10)):
+        for i in range(random.randint(5, 15)):
             transaction_list = []
 
-            for y in range(random.randint(5, 8)):
+            for y in range(random.randint(5, 15)):
                 transaction_list.append(Transaction(
                     Wallet(), Wallet().address, random.randint(1, 250)).to_json())
 
@@ -172,7 +205,7 @@ if (len(sys.argv) > 1):
             blockchain.add_block(transaction_list)
             print(f'\033[94m{len(blockchain.chain)}. block mined!')
 
-        for i in range(random.randint(5, 8)):
+        for i in range(random.randint(5, 10)):
             transaction_pool.set_transaction(
                 Transaction(Wallet(), Wallet().address,
                             random.randint(1, 250))

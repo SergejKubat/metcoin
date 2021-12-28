@@ -7,6 +7,7 @@ import { AiFillCopy } from 'react-icons/ai';
 
 import CreateTransaction from 'components/CreateTransaction';
 import TransactionItem from 'components/TransactionItem';
+import Spinner from 'components/Spinner';
 
 import { calculateTotalSpent } from 'utils/transaction';
 
@@ -33,7 +34,7 @@ const WalletPage = () => {
             <h1>My Wallet</h1>
             <h2>Information about my wallet</h2>
             {loading ? (
-                <div>Loading...</div>
+                <Spinner />
             ) : (
                 <div className="wallet">
                     <div className="wallet-container">

@@ -7,6 +7,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiFillCopy } from 'react-icons/ai';
 import { GiMineWagon } from 'react-icons/gi';
 
+import Spinner from 'components/Spinner';
+
 const TransactionList = () => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ const TransactionList = () => {
         axios
             .get('http://127.0.0.1:5000/transactions')
             .then((response) => {
-                setTransactions(response.data.reverse());
+                setTransactions(response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -44,7 +46,7 @@ const TransactionList = () => {
             <h2>The most recently published unconfirmed transactions</h2>
             <div style={{ overflowX: 'auto' }}>
                 {loading ? (
-                    <div>Loading...</div>
+                    <Spinner />
                 ) : (
                     <table className="table">
                         <tbody>

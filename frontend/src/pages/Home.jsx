@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiOutlineArrowRight, AiFillCopy } from 'react-icons/ai';
 
+import TransactionsPerBlock from 'components/Charts/TransactionsPerBlock';
+import MinerChart from 'components/Charts/Miner';
+import Spinner from 'components/Spinner';
+
 import Logo from 'assets/images/logo.png';
 
 const HomePage = () => {
@@ -43,17 +47,22 @@ const HomePage = () => {
                 Metcoin cryptocurrency information about the most recently mined blocks, unconfirmed transactions, and data for the latest
                 transactions.
             </h2>
+            <div className="home-details">
+                <TransactionsPerBlock />
+                <MinerChart />
+            </div>
             {loading ? (
-                <div>Loading...</div>
+                <Spinner />
             ) : (
-                <div className="home-details">
-                    <div>
+                <React.Fragment>
+                    <div style={{ marginTop: '3rem', overflowX: 'auto' }}>
                         <h2>Latest Blocks</h2>
                         <p>The most recently mined blocks</p>
                         <table className="table" style={{ marginTop: 0 }}>
                             <tbody>
                                 <tr>
                                     <th>Number</th>
+                                    <th>Hash</th>
                                     <th>Mined</th>
                                     <th>Miner</th>
                                     <th>Transactions</th>
@@ -63,6 +72,9 @@ const HomePage = () => {
                                         <tr key={block.hash}>
                                             <td>
                                                 <Link to={`/blocks/${block.hash}`}>{block.number}</Link>
+                                            </td>
+                                            <td>
+                                                <Link to={`/blocks/${block.hash}`}>{block.hash}</Link>
                                             </td>
                                             <td>
                                                 <Moment fromNow>{new Date(block.timestamp / 1000000).toISOString()}</Moment>
@@ -86,7 +98,7 @@ const HomePage = () => {
                             </button>
                         </Link>
                     </div>
-                    <div>
+                    <div style={{ marginTop: '3rem', overflowX: 'auto' }}>
                         <h2>Latest Transactions</h2>
                         <p>The most recently published unconfirmed transactions</p>
                         <table className="table" style={{ marginTop: 0 }}>
@@ -123,7 +135,7 @@ const HomePage = () => {
                             </button>
                         </Link>
                     </div>
-                </div>
+                </React.Fragment>
             )}
         </div>
     );

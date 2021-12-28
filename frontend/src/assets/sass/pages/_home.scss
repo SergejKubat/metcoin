@@ -17,6 +17,15 @@
 
         & > * {
             width: 50%;
+
+            @include respond(tablet) {
+                width: 100%;
+            }
+        }
+
+        @include respond(tablet) {
+            justify-content: center;
+            flex-wrap: wrap;
         }
     }
 }

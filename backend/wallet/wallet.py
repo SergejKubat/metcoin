@@ -51,7 +51,7 @@ class Wallet:
         try:
             deserialized_public_key.verify(
                 encode_dss_signature(r, s),
-                json.dumps(data).encode('utf-8'),
+                json.dumps(data, sort_keys=True).encode('utf-8'),
                 ec.ECDSA(hashes.SHA256())
             )
             return True

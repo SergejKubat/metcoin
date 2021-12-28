@@ -7,6 +7,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiFillCopy } from 'react-icons/ai';
 
 import TransactionItem from 'components/TransactionItem';
+import Spinner from 'components/Spinner';
 
 import { calcTransactionVolume } from 'utils/transaction';
 
@@ -31,7 +32,9 @@ const BlockPage = () => {
 
     return (
         <React.Fragment>
-            {!loading && (
+            {loading ? (
+                <Spinner />
+            ) : (
                 <div>
                     <h1>Block Details</h1>
                     <div className="details-row">

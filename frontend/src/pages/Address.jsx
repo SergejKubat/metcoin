@@ -7,6 +7,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiFillCopy } from 'react-icons/ai';
 
 import TransactionItem from 'components/TransactionItem';
+import Spinner from 'components/Spinner';
 
 import { calculateTotalSpent } from 'utils/transaction';
 
@@ -35,7 +36,7 @@ const Address = () => {
             <h1>Address Details</h1>
             <h2>Information about address</h2>
             {loading ? (
-                <div>Loading...</div>
+                <Spinner />
             ) : (
                 <div className="wallet">
                     <div className="wallet-container">
@@ -54,7 +55,9 @@ const Address = () => {
                             </div>
                             <div className="details-row">
                                 <div className="details-col">Total received</div>
-                                <div className="details-col">{address.balance + calculateTotalSpent(address.transactions, address.address)} MTC</div>
+                                <div className="details-col">
+                                    {address.balance + calculateTotalSpent(address.transactions, address.address)} MTC
+                                </div>
                             </div>
                             <div className="details-row">
                                 <div className="details-col">Total sent</div>

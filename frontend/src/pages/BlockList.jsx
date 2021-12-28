@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { AiFillCopy } from 'react-icons/ai';
 
+import Spinner from 'components/Spinner';
+
 const BlockList = () => {
     const [blocks, setBlocks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,7 +32,7 @@ const BlockList = () => {
             <h2>The most recently mined blocks</h2>
             <div style={{ overflowX: 'auto' }}>
                 {loading ? (
-                    <div>Loading...</div>
+                    <Spinner />
                 ) : (
                     <table className="table">
                         <tbody>
