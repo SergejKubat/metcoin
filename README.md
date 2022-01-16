@@ -22,3 +22,15 @@ python -m backend.app
 ```
 python -m backend.app peer
 ```
+
+**Seed blockchain data**
+```
+python -m backend.app seed
+```
+
+**Run frontend**
+```
+cd frontend
+npm install
+npm run start
+```
